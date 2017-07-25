@@ -34,7 +34,7 @@ export default class extends Component {
           style={{ height, position: 'absolute', width }}
         />
         <ScrollView
-          bounces={this.props.bounces === false || true}
+          bounces={this.props.bounces !== false}
           horizontal
           onScroll={onScroll}
           pagingEnabled
