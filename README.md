@@ -2,7 +2,7 @@
 <img src="https://raw.githubusercontent.com/sonaye/react-native-animated-swiper/master/demo.gif" width="400">
 
 # Installation
-`yarn add react-native-animated-swiper`
+`yarn add react-native-behavior react-native-animated-swiper`
 
 # Definition
 ```javascript
