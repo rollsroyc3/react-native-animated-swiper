@@ -7,9 +7,28 @@ const { height, width } = Dimensions.get('window');
 
 export default class extends Component {
   componentWillMount() {
-    this.props.children.forEach(({ props: { backgroundColor } }, i) => {
+    // check if we have a single child
+    let { children } = this.props;
+    if (!Array.isArray(children)) children = [children];
+
+    // remove if null
+    children = children.filter(child => child);
+
+    // if we have a single valid child
+    if (children.length === 1) {
+      this.indices.push(0);
+      this.states.push({});
+    }
+
+    // if we have no valid children
+    if (children.length === 0) {
+      this.indices = [0, 0];
+      this.states = [{}, {}];
+    }
+
+    children.forEach((child, i) => {
       this.indices.push(width * i);
-      this.states.push({ backgroundColor });
+      this.states.push({ backgroundColor: child.props.backgroundColor });
     });
   }
 
@@ -24,6 +43,13 @@ export default class extends Component {
       { nativeEvent: { contentOffset: { x: animatedValue } } }
     ]);
 
+    // check if we have a single child
+    let { children } = this.props;
+    if (!Array.isArray(children)) children = [children];
+
+    // remove if null
+    children = children.filter(child => child);
+
     return (
       <View style={{ flex: 1 }}>
         <Behavior
@@ -33,6 +59,7 @@ export default class extends Component {
           states={this.states}
           style={{ height, position: 'absolute', width }}
         />
+
         <ScrollView
           bounces={this.props.bounces !== false}
           horizontal
@@ -40,28 +67,31 @@ export default class extends Component {
           pagingEnabled
           scrollEventThrottle={16}
           showsHorizontalScrollIndicator={false}>
-          {this.props.children.map((slide, i) =>
+          {children.map((slide, i) => (
             <View key={`slide-${i}`} style={{ width }}>
               {slide}
             </View>
-          )}
+          ))}
         </ScrollView>
-        {this.props.dots &&
+
+        {this.props.dots && (
           <View>
-            {this.props.shadow &&
+            {this.props.shadow && (
               <View
                 style={[
                   styles.shadowContainer,
                   styles.shadow,
                   this.props.shadowStyle
                 ]}
-              />}
+              />
+            )}
+
             <View
               style={[
                 styles.dotContainer,
                 { bottom: this.props.dotsBottom || 29 }
               ]}>
-              {this.props.children.map((slide, i) =>
+              {children.map((slide, i) => (
                 <View
                   key={`swiper-dot-${i}`}
                   style={[
@@ -73,14 +103,15 @@ export default class extends Component {
                     }
                   ]}
                 />
-              )}
+              ))}
             </View>
+
             <View
               style={[
                 styles.dotContainer,
                 { bottom: this.props.dotsBottom || 29 }
               ]}>
-              {this.props.children.map((slide, i) =>
+              {children.map((slide, i) => (
                 <Animated.View
                   key={`swiper-dot-active-${i}`}
                   style={[
@@ -93,9 +124,10 @@ export default class extends Component {
                     }
                   ]}
                 />
-              )}
+              ))}
             </View>
-          </View>}
+          </View>
+        )}
       </View>
     );
   }
