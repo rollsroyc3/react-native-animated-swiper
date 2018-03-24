@@ -6,9 +6,21 @@ import Behavior from 'react-native-behavior';
 const { height, width } = Dimensions.get('window');
 
 export default class extends Component {
-  componentWillMount() {
-    // check if we have a single child
+  engine = new Animated.Value(0);
+
+  position = Animated.divide(this.engine, width);
+
+  scroll = Animated.event([
+    { nativeEvent: { contentOffset: { x: this.engine } } }
+  ]);
+
+  render() {
     let { children } = this.props;
+
+    let indices = [];
+    let states = [];
+
+    // check if we have a single child
     if (!Array.isArray(children)) children = [children];
 
     // remove if null
@@ -16,59 +28,40 @@ export default class extends Component {
 
     // if we have a single valid child
     if (children.length === 1) {
-      this.indices.push(0);
-      this.states.push({});
+      indices.push(0);
+      states.push({});
     }
 
     // if we have no valid children
     if (children.length === 0) {
-      this.indices = [0, 0];
-      this.states = [{}, {}];
+      indices = [0, 0];
+      states = [{}, {}];
     }
 
     children.forEach((child, i) => {
-      this.indices.push(width * i);
-      this.states.push({ backgroundColor: child.props.backgroundColor });
+      indices.push(width * i);
+      states.push({ backgroundColor: child.props.backgroundColor });
     });
-  }
-
-  indices = [];
-  states = [];
-
-  render() {
-    const animatedValue = new Animated.Value(0);
-    const position = Animated.divide(animatedValue, width);
-
-    const onScroll = Animated.event([
-      { nativeEvent: { contentOffset: { x: animatedValue } } }
-    ]);
-
-    // check if we have a single child
-    let { children } = this.props;
-    if (!Array.isArray(children)) children = [children];
-
-    // remove if null
-    children = children.filter(child => child);
 
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.full}>
         <Behavior
-          animatedValue={animatedValue}
+          animatedValue={this.engine}
           clamp
-          indices={this.indices}
-          states={this.states}
-          style={{ height, position: 'absolute', width }}
+          indices={indices}
+          states={states}
+          style={styles.slides}
         />
 
         <ScrollView
-          bounces={this.props.bounces !== false}
-          horizontal
-          onScroll={onScroll}
           pagingEnabled
-          scrollEventThrottle={16}
-          showsHorizontalScrollIndicator={false}>
+          showsHorizontalScrollIndicator={false}
+          {...this.props.scrollViewProps}
+          horizontal
+          onScroll={this.scroll}
+          scrollEventThrottle={16}>
           {children.map((slide, i) => (
-            <View key={`slide-${i}`} style={{ width }}>
+            <View key={`slide-${i}`} style={styles.slide}>
               {slide}
             </View>
           ))}
@@ -89,7 +82,7 @@ export default class extends Component {
             <View
               style={[
                 styles.dotContainer,
-                { bottom: this.props.dotsBottom || 29 }
+                { bottom: this.props.dotsBottom || 30 }
               ]}>
               {children.map((slide, i) => (
                 <View
@@ -109,7 +102,7 @@ export default class extends Component {
             <View
               style={[
                 styles.dotContainer,
-                { bottom: this.props.dotsBottom || 29 }
+                { bottom: this.props.dotsBottom || 30 }
               ]}>
               {children.map((slide, i) => (
                 <Animated.View
@@ -120,7 +113,7 @@ export default class extends Component {
                     {
                       backgroundColor:
                         this.props.dotsColorActive || 'rgba(0, 0, 0, 0.75)',
-                      opacity: Animated.add(position, 1 - i)
+                      opacity: Animated.add(this.position, 1 - i)
                     }
                   ]}
                 />
@@ -134,19 +127,22 @@ export default class extends Component {
 }
 
 const styles = {
-  dot: {
-    borderRadius: 4,
-    height: 8,
-    marginLeft: 4,
-    marginRight: 4,
-    width: 8
-  },
+  full: { flex: 1 },
+  slides: { height, position: 'absolute', width },
+  slide: { width },
   dotContainer: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
     position: 'absolute',
     width
+  },
+  dot: {
+    borderRadius: 4,
+    height: 8,
+    marginLeft: 4,
+    marginRight: 4,
+    width: 8
   },
   shadowContainer: {
     bottom: 0,
@@ -155,9 +151,10 @@ const styles = {
     width
   },
   shadow: {
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.125,
-    shadowRadius: 8
+    backgroundColor: '#ffffff',
+    shadowColor: 'rgba(0, 0, 0, 0.15)',
+    shadowOffset: { height: -0.5, width: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 7.5
   }
 };
