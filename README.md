@@ -1,5 +1,7 @@
 # react-native-animated-swiper
 
+[![npm version](https://badge.fury.io/js/react-native-animated-swiper.svg)](https://badge.fury.io/js/react-native-animated-swiper)
+
 <img src="https://raw.githubusercontent.com/sonaye/react-native-animated-swiper/master/demo.gif" width="400">
 
 # Installation
