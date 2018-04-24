@@ -56,6 +56,7 @@ export default class extends Component {
         <ScrollView
           pagingEnabled
           showsHorizontalScrollIndicator={false}
+          onMomentumScrollEnd={this.props.onSwipe}
           {...this.props.scrollViewProps}
           horizontal
           onScroll={this.scroll}
