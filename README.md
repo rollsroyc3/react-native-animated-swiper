@@ -4,55 +4,57 @@
 
 <img src="https://raw.githubusercontent.com/sonaye/react-native-animated-swiper/master/demo.gif" width="400">
 
-# Installation
+## Install
 
-`yarn add react-native-behavior react-native-animated-swiper`
+`yarn add react-native-animated-swiper`
 
-# Definition
+## Definition
 
-```javascript
-type swiper = {
-  children: any,            // all children must have a backgroundColor prop
-  dots?: boolean,           // default = false
-  dotsBottom?: number,      // default = 30,
-  dotsColor?: string,       // default = 'rgba(0, 0, 0, 0.25)'
-  dotsColorActive?: string, // default = 'rgba(0, 0, 0, 0.75)'
-  dotStyle?: Object,        // default = dotStyleDefault
-  dotStyleActive?: Object,  // default = {}
-  scrollViewProps:? Object,
-  shadow?: boolean,         // default = false
-  shadowStyle?: Object      // default = shadowStyleDefault
-};
-```
+| Prop            | Type       | Required | Default               |
+| --------------- | ---------- | -------- | --------------------- |
+| backgroundColor | `string[]` | Yes      | `null`                |
+| children        | `any`      | No       | `null`                |
+| dots            | `boolean`  | No       | `false`               |
+| dotsBottom      | `number`   | No       | `30`                  |
+| dotsColor       | `string`   | No       | `rgba(0, 0, 0, 0.25)` |
+| dotsColorActive | `string`   | No       | `rgba(0, 0, 0, 0.75)` |
+| dotStyle        | `object`   | No       | `dotStyleDefault`     |
+| dotStyleActive  | `object`   | No       | `{}`                  |
+| shadow          | `boolean`  | No       | `false`               |
+| shadowStyle     | `object`   | No       | `shadowStyleDefault`  |
 
 ## Example
 
-```javascript
+```js
 import React from 'react';
+
 import { Text, View } from 'react-native';
 
 import Swiper from 'react-native-animated-swiper';
 
 const Example = () => (
   <Swiper
+    backgroundColor={['#4285f4', '#0f9d58', '#f4b400', '#db4437']}
     dots
     dotsColor="rgba(255, 255, 255, 0.25)"
     dotsColorActive="rgba(255, 255, 255, 0.75)">
-    <Slide backgroundColor="#4285f4" title="Lorem" />
-    <Slide backgroundColor="#0f9d58" title="ipsum" />
-    <Slide backgroundColor="#f4b400" title="dolor" />
-    <Slide backgroundColor="#db4437" title="sit" />
+    <Slide title="Lorem" />
+    <Slide title="ipsum" />
+    <Slide title="dolor" />
+    <Slide title="sit" />
   </Swiper>
 );
 
 const Slide = ({ title }) => (
-  <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-    <Text
-      style={{ backgroundColor: 'transparent', color: '#fff', fontSize: 48 }}>
-      {title}
-    </Text>
+  <View style={styles.slide}>
+    <Text style={styles.title}>{title}</Text>
   </View>
 );
+
+const styles = {
+  slide: { alignItems: 'center', flex: 1, justifyContent: 'center' },
+  title: { color: '#fff', fontSize: 48 }
+};
 
 export default Example;
 ```

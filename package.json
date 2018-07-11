@@ -2,14 +2,13 @@
   "license": "MIT",
   "name": "react-native-animated-swiper",
   "description": "A swiper component for React Native.",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "main": "swiper.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sonaye/react-native-animated-swiper.git"
   },
-  "peerDependencies": {
-    "react-native-behavior": "^0.0.18"
-  },
-  "files": ["swiper.js"]
+  "files": [
+    "swiper.js"
+  ]
 }

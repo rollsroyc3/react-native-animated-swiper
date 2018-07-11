@@ -1,135 +1,107 @@
-import React, { Component } from 'react';
-import { Animated, Dimensions, ScrollView, View } from 'react-native';
+import React from 'react';
 
-import Behavior from 'react-native-behavior';
+import { Animated, Dimensions, View } from 'react-native';
 
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-export default class extends Component {
-  engine = new Animated.Value(0);
+const Swiper = props => {
+  const {
+    backgroundColor: outputRange,
+    children,
+    dots,
+    dotsBottom,
+    dotsColor,
+    dotsColorActive,
+    dotStyle,
+    dotStyleActive,
+    onSwipe,
+    shadow,
+    shadowStyle,
+    style,
+    ...rest
+  } = props;
 
-  position = Animated.divide(this.engine, width);
+  const scroll = new Animated.Value(0);
 
-  scroll = Animated.event([
-    { nativeEvent: { contentOffset: { x: this.engine } } }
+  const position = Animated.divide(scroll, width);
+
+  const inputRange = Array(children.length)
+    .fill()
+    .map((_, index) => index * width);
+
+  const backgroundColor = scroll.interpolate({
+    inputRange,
+    outputRange,
+    extrapolate: 'clamp'
+  });
+
+  const onScroll = Animated.event([
+    { nativeEvent: { contentOffset: { x: scroll } } }
   ]);
 
-  render() {
-    let { children } = this.props;
-
-    let indices = [];
-    let states = [];
-
-    // check if we have a single child
-    if (!Array.isArray(children)) children = [children];
-
-    // remove if null
-    children = children.filter(child => child);
-
-    // if we have a single valid child
-    if (children.length === 1) {
-      indices.push(0);
-      states.push({});
-    }
-
-    // if we have no valid children
-    if (children.length === 0) {
-      indices = [0, 0];
-      states = [{}, {}];
-    }
-
-    children.forEach((child, i) => {
-      indices.push(width * i);
-      states.push({ backgroundColor: child.props.backgroundColor });
-    });
-
-    return (
-      <View style={styles.full}>
-        <Behavior
-          animatedValue={this.engine}
-          clamp
-          indices={indices}
-          states={states}
-          style={styles.slides}
-        />
-
-        <ScrollView
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          onMomentumScrollEnd={this.props.onSwipe}
-          {...this.props.scrollViewProps}
-          horizontal
-          onScroll={this.scroll}
-          scrollEventThrottle={16}>
-          {children.map((slide, i) => (
-            <View key={`slide-${i}`} style={styles.slide}>
-              {slide}
-            </View>
-          ))}
-        </ScrollView>
-
-        {this.props.dots && (
-          <View>
-            {this.props.shadow && (
-              <View
-                style={[
-                  styles.shadowContainer,
-                  styles.shadow,
-                  this.props.shadowStyle
-                ]}
-              />
-            )}
-
-            <View
-              style={[
-                styles.dotContainer,
-                { bottom: this.props.dotsBottom || 30 }
-              ]}>
-              {children.map((slide, i) => (
-                <View
-                  key={`swiper-dot-${i}`}
-                  style={[
-                    styles.dot,
-                    this.props.dotStyle,
-                    {
-                      backgroundColor:
-                        this.props.dotsColor || 'rgba(0, 0, 0, 0.25)'
-                    }
-                  ]}
-                />
-              ))}
-            </View>
-
-            <View
-              style={[
-                styles.dotContainer,
-                { bottom: this.props.dotsBottom || 30 }
-              ]}>
-              {children.map((slide, i) => (
-                <Animated.View
-                  key={`swiper-dot-active-${i}`}
-                  style={[
-                    styles.dot,
-                    this.props.dotStyleActive,
-                    {
-                      backgroundColor:
-                        this.props.dotsColorActive || 'rgba(0, 0, 0, 0.75)',
-                      opacity: Animated.add(this.position, 1 - i)
-                    }
-                  ]}
-                />
-              ))}
-            </View>
+  return (
+    <View style={styles.full}>
+      <Animated.ScrollView
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        {...rest}
+        onMomentumScrollEnd={onSwipe}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+        style={[{ backgroundColor }, style]}>
+        {children.map((slide, i) => (
+          <View key={`slide-${i}`} style={styles.slide}>
+            {slide}
           </View>
+        ))}
+      </Animated.ScrollView>
+
+      {dots &&
+        shadow && (
+          <View style={[styles.shadowContainer, styles.shadow, shadowStyle]} />
         )}
-      </View>
-    );
-  }
-}
+
+      {dots && (
+        <View style={[styles.dotContainer, { bottom: dotsBottom }]}>
+          {children.map((slide, i) => (
+            <View
+              key={`swiper-dot-${i}`}
+              style={[styles.dot, dotStyle, { backgroundColor: dotsColor }]}
+            />
+          ))}
+        </View>
+      )}
+
+      {dots && (
+        <View style={[styles.dotContainer, { bottom: dotsBottom }]}>
+          {children.map((slide, i) => (
+            <Animated.View
+              key={`swiper-dot-active-${i}`}
+              style={[
+                styles.dot,
+                dotStyleActive,
+                {
+                  backgroundColor: dotsColorActive,
+                  opacity: Animated.add(position, 1 - i)
+                }
+              ]}
+            />
+          ))}
+        </View>
+      )}
+    </View>
+  );
+};
+
+Swiper.defaultProps = {
+  dotsBottom: 30,
+  dotsColor: 'rgba(0, 0, 0, 0.25)',
+  dotsColorActive: 'rgba(0, 0, 0, 0.75)'
+};
 
 const styles = {
   full: { flex: 1 },
-  slides: { height, position: 'absolute', width },
   slide: { width },
   dotContainer: {
     alignItems: 'center',
@@ -152,10 +124,12 @@ const styles = {
     width
   },
   shadow: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#fff',
     shadowColor: 'rgba(0, 0, 0, 0.15)',
     shadowOffset: { height: -0.5, width: 0 },
     shadowOpacity: 1,
     shadowRadius: 7.5
   }
 };
+
+export default Swiper;
