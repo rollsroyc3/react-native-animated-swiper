@@ -21,3 +21,15 @@
   <Slide />
 </Swiper>
 ```
+
+- **Breaking**: `scrollViewProps` props has been removed, any extra `ScrollView` props are being forwarded now.
+
+```js
+// before
+<Swiper scrollViewProps={{ horizontal: false }} />
+```
+
+```js
+// after
+<Swiper horizontal={false} />
+```
