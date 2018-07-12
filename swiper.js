@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 
 import { Animated, Dimensions, View } from 'react-native';
@@ -13,6 +15,7 @@ const Swiper = props => {
     dotsColorActive,
     dotStyle,
     dotStyleActive,
+    driver,
     onSwipe,
     shadow,
     shadowStyle,
@@ -22,15 +25,13 @@ const Swiper = props => {
 
   let { children } = props;
 
-  const scroll = new Animated.Value(0);
-
-  const position = Animated.divide(scroll, width);
-
   if (!Array.isArray(children)) children = [children];
+
+  const position = Animated.divide(driver, width);
 
   const backgroundColor =
     children.length > 1
-      ? scroll.interpolate({
+      ? driver.interpolate({
           inputRange: [...Array(children.length).keys()].map(
             index => index * width
           ),
@@ -41,19 +42,19 @@ const Swiper = props => {
       : (outputRange && outputRange[0]) || 'transparent';
 
   const onScroll = Animated.event([
-    { nativeEvent: { contentOffset: { x: scroll } } }
+    { nativeEvent: { contentOffset: { x: driver } } }
   ]);
 
   return (
     <View style={styles.full}>
       <Animated.ScrollView
         horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        {...rest}
         onMomentumScrollEnd={onSwipe}
         onScroll={onScroll}
+        pagingEnabled
         scrollEventThrottle={16}
+        showsHorizontalScrollIndicator={false}
+        {...rest}
         style={[{ backgroundColor }, style]}>
         {children.map((slide, i) => (
           <View key={`slide-${i}`} style={styles.slide}>
@@ -102,7 +103,8 @@ const Swiper = props => {
 Swiper.defaultProps = {
   dotsBottom: 30,
   dotsColor: 'rgba(0, 0, 0, 0.25)',
-  dotsColorActive: 'rgba(0, 0, 0, 0.75)'
+  dotsColorActive: 'rgba(0, 0, 0, 0.75)',
+  driver: new Animated.Value(0)
 };
 
 const styles = {

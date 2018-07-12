@@ -1,3 +1,8 @@
+# 0.0.17
+
+- Support overwriting default props.
+- Add `driver` prop.
+
 # 0.0.16
 
 - Support having a single child.
