@@ -7,7 +7,6 @@ const { width } = Dimensions.get('window');
 const Swiper = props => {
   const {
     backgroundColor: outputRange,
-    children,
     dots,
     dotsBottom,
     dotsColor,
@@ -21,19 +20,25 @@ const Swiper = props => {
     ...rest
   } = props;
 
+  let { children } = props;
+
   const scroll = new Animated.Value(0);
 
   const position = Animated.divide(scroll, width);
 
-  const inputRange = Array(children.length)
-    .fill()
-    .map((_, index) => index * width);
+  if (!Array.isArray(children)) children = [children];
 
-  const backgroundColor = scroll.interpolate({
-    inputRange,
-    outputRange,
-    extrapolate: 'clamp'
-  });
+  const backgroundColor =
+    children.length > 1
+      ? scroll.interpolate({
+          inputRange: [...Array(children.length).keys()].map(
+            index => index * width
+          ),
+          outputRange:
+            outputRange || Array(children.length).fill('transparent'),
+          extrapolate: 'clamp'
+        })
+      : (outputRange && outputRange[0]) || 'transparent';
 
   const onScroll = Animated.event([
     { nativeEvent: { contentOffset: { x: scroll } } }

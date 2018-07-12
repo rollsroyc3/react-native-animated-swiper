@@ -12,7 +12,7 @@
 
 | Prop            | Type       | Required | Default               |
 | --------------- | ---------- | -------- | --------------------- |
-| backgroundColor | `string[]` | Yes      | `null`                |
+| backgroundColor | `string[]` | No       | `transparent`         |
 | children        | `any`      | No       | `null`                |
 | dots            | `boolean`  | No       | `false`               |
 | dotsBottom      | `number`   | No       | `30`                  |

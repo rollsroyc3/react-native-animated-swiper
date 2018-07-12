@@ -1,3 +1,8 @@
+# 0.0.16
+
+- Support having a single child.
+- Support not passing a `backgroundColor` prop.
+
 # 0.0.15
 
 - Enhance performance.
