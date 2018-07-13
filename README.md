@@ -16,14 +16,15 @@ yarn add react-native-animated-swiper
 | --------------- | ---------------- | -------- | ----------------------- |
 | backgroundColor | `string[]`       | No       | `transparent`           |
 | children        | `any`            | No       | `null`                  |
-| dots            | `boolean`        | No       | `false`                 |
+| dots            | `bool`           | No       | `false`                 |
 | dotsBottom      | `number`         | No       | `30`                    |
 | dotsColor       | `string`         | No       | `rgba(0, 0, 0, 0.25)`   |
 | dotsColorActive | `string`         | No       | `rgba(0, 0, 0, 0.75)`   |
 | dotStyle        | `object`         | No       | `dotStyleDefault`       |
-| dotStyleActive  | `object`         | No       | `{}`                    |
+| dotStyleActive  | `object`         | No       | `dotStyleDefault`       |
 | driver          | `Animated.Value` | No       | `new Animated.Value(0)` |
-| shadow          | `boolean`        | No       | `false`                 |
+| onSwipe         | `func`           | No       | `undefined`             |
+| shadow          | `bool`           | No       | `false`                 |
 | shadowStyle     | `object`         | No       | `shadowStyleDefault`    |
 
 ## Example
