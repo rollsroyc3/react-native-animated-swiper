@@ -1,13 +1,13 @@
 # 0.0.20
 
-- **Breaking:** `onSwipe` props now passes (index, event).
+- **Breaking:** `onSwipe` prop now passes `(index, event)`.
 
 ```js
 // before
 const onSwipe = e => e.nativeEvent ..
 
 // after
-const onSwipe = (index, e) => e.nativeEvent ..
+const onSwipe = (i, e) => e.nativeEvent ..
 
 <Swiper onSwipe={onSwipe} />
 ```
