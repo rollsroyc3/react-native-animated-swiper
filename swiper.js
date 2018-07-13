@@ -32,9 +32,9 @@ const Swiper = props => {
   const backgroundColor =
     children.length > 1
       ? driver.interpolate({
-          inputRange: [...Array(children.length).keys()].map(
-            index => index * width
-          ),
+          inputRange: Array(children.length)
+            .fill()
+            .map((_, index) => (index + 1) * width),
           outputRange:
             outputRange || Array(children.length).fill('transparent'),
           extrapolate: 'clamp'

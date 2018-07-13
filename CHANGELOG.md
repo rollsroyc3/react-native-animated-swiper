@@ -1,3 +1,7 @@
+# 0.0.18
+
+- Fixed a bug where `[...Array(N).keys()]` is not working on Android.
+
 # 0.0.17
 
 - Support overwriting default props.
