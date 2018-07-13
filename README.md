@@ -22,7 +22,7 @@ yarn add react-native-animated-swiper
 | dotsColorActive | `string`         | No       | `rgba(0, 0, 0, 0.75)`         |
 | dotStyle        | `object`         | No       | `dotStyleDefault`             |
 | dotStyleActive  | `object`         | No       | `dotStyleDefault`             |
-| driver          | `Animated.Value` | No       | `new Animated.Value(0)`.      |
+| driver          | `Animated.Value` | No       | `new Animated.Value(0)`       |
 | onSwipe         | `func`           | No       | `(index, event) => undefined` |
 | shadow          | `bool`           | No       | `false`                       |
 | shadowStyle     | `object`         | No       | `shadowStyleDefault`          |
