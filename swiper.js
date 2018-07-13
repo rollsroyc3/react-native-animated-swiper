@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 
 import { Animated, Dimensions, View } from 'react-native';
@@ -34,7 +32,7 @@ const Swiper = props => {
       ? driver.interpolate({
           inputRange: Array(children.length)
             .fill()
-            .map((_, index) => (index + 1) * width),
+            .map((_, index) => index * width),
           outputRange:
             outputRange || Array(children.length).fill('transparent'),
           extrapolate: 'clamp'
