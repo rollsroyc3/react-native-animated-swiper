@@ -12,20 +12,20 @@ yarn add react-native-animated-swiper
 
 ## Definition
 
-| Prop            | Type             | Required | Default                 |
-| --------------- | ---------------- | -------- | ----------------------- |
-| backgroundColor | `string[]`       | No       | `transparent`           |
-| children        | `any`            | No       | `null`                  |
-| dots            | `bool`           | No       | `false`                 |
-| dotsBottom      | `number`         | No       | `30`                    |
-| dotsColor       | `string`         | No       | `rgba(0, 0, 0, 0.25)`   |
-| dotsColorActive | `string`         | No       | `rgba(0, 0, 0, 0.75)`   |
-| dotStyle        | `object`         | No       | `dotStyleDefault`       |
-| dotStyleActive  | `object`         | No       | `dotStyleDefault`       |
-| driver          | `Animated.Value` | No       | `new Animated.Value(0)` |
-| onSwipe         | `func`           | No       | `undefined`             |
-| shadow          | `bool`           | No       | `false`                 |
-| shadowStyle     | `object`         | No       | `shadowStyleDefault`    |
+| Prop            | Type             | Required | Default                       |
+| --------------- | ---------------- | -------- | ----------------------------- |
+| backgroundColor | `string[]`       | No       | `transparent`                 |
+| children        | `any`            | No       | `null`                        |
+| dots            | `bool`           | No       | `false`                       |
+| dotsBottom      | `number`         | No       | `30`                          |
+| dotsColor       | `string`         | No       | `rgba(0, 0, 0, 0.25)`         |
+| dotsColorActive | `string`         | No       | `rgba(0, 0, 0, 0.75)`         |
+| dotStyle        | `object`         | No       | `dotStyleDefault`             |
+| dotStyleActive  | `object`         | No       | `dotStyleDefault`             |
+| driver          | `Animated.Value` | No       | `new Animated.Value(0)`.      |
+| onSwipe         | `func`           | No       | `(index, event) => undefined` |
+| shadow          | `bool`           | No       | `false`                       |
+| shadowStyle     | `object`         | No       | `shadowStyleDefault`          |
 
 ## Example
 
