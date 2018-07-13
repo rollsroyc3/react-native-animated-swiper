@@ -43,11 +43,14 @@ const Swiper = props => {
     { nativeEvent: { contentOffset: { x: driver } } }
   ]);
 
+  const onMomentumScrollEnd = e =>
+    onSwipe && onSwipe(e.nativeEvent.contentOffset.x / width, e);
+
   return (
     <View style={styles.full}>
       <Animated.ScrollView
         horizontal
-        onMomentumScrollEnd={onSwipe}
+        onMomentumScrollEnd={onMomentumScrollEnd}
         onScroll={onScroll}
         pagingEnabled
         scrollEventThrottle={16}

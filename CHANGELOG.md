@@ -1,3 +1,17 @@
+# 0.0.20
+
+- **Breaking:** `onSwipe` props now passes (index, event).
+
+```js
+// before
+const onSwipe = e => e.nativeEvent ..
+
+// after
+const onSwipe = (index, e) => e.nativeEvent ..
+
+<Swiper onSwipe={onSwipe} />
+```
+
 # 0.0.19
 
 - Fixed a bug where `[...Array(N).keys()]` is not working on Android.
