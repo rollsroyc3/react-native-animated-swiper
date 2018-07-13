@@ -6,7 +6,9 @@
 
 ## Install
 
-`yarn add react-native-animated-swiper`
+```bash
+yarn add react-native-animated-swiper
+```
 
 ## Definition
 
