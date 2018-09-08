@@ -14,18 +14,14 @@ yarn add react-native-animated-swiper
 
 | Prop            | Type             | Required | Default                       |
 | --------------- | ---------------- | -------- | ----------------------------- |
-| backgroundColor | `string[]`       | No       | `transparent`                 |
 | children        | `any`            | No       | `null`                        |
 | dots            | `bool`           | No       | `false`                       |
-| dotsBottom      | `number`         | No       | `30`                          |
+| dotsBottom      | `number`         | No       | `100`                         |
 | dotsColor       | `string`         | No       | `rgba(0, 0, 0, 0.25)`         |
-| dotsColorActive | `string`         | No       | `rgba(0, 0, 0, 0.75)`         |
-| dotStyle        | `object`         | No       | `dotStyleDefault`             |
-| dotStyleActive  | `object`         | No       | `dotStyleDefault`             |
+| dotsColorActive | `string`         | No       | `#000`                        |
+| dotsStyle       | `object`         | No       | `dotsStyleDefault`            |
 | driver          | `Animated.Value` | No       | `new Animated.Value(0)`       |
-| onSwipe         | `func`           | No       | `(index, event) => undefined` |
-| shadow          | `bool`           | No       | `false`                       |
-| shadowStyle     | `object`         | No       | `shadowStyleDefault`          |
+| onSwipe         | `func`           | No       | `(event, index) => undefined` |
 
 ## Example
 
@@ -38,10 +34,10 @@ import Swiper from 'react-native-animated-swiper';
 
 const Example = () => (
   <Swiper
-    backgroundColor={['#4285f4', '#0f9d58', '#f4b400', '#db4437']}
     dots
-    dotsColor="rgba(255, 255, 255, 0.25)"
-    dotsColorActive="rgba(255, 255, 255, 0.75)">
+    dotsColor="rgba(97, 218, 251, 0.25)"
+    dotsColorActive="rgba(97, 218, 251, 1)"
+    style={styles.slides}>
     <Slide title="Lorem" />
     <Slide title="ipsum" />
     <Slide title="dolor" />
@@ -56,8 +52,9 @@ const Slide = ({ title }) => (
 );
 
 const styles = {
+  slides: { backgroundColor: '#F5FCFF' },
   slide: { alignItems: 'center', flex: 1, justifyContent: 'center' },
-  title: { color: '#fff', fontSize: 48 }
+  title: { color: 'rgba(97, 218, 251, 1)', fontSize: 36 }
 };
 
 export default Example;

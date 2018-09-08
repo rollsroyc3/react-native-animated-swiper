@@ -4,47 +4,33 @@ import { Animated, Dimensions, View } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
-const Swiper = props => {
+const Swiper = React.forwardRef((props, ref) => {
   const {
-    backgroundColor: outputRange,
+    children,
     dots,
     dotsBottom,
     dotsColor,
     dotsColorActive,
-    dotStyle,
-    dotStyleActive,
+    dotsStyle,
     driver,
     onSwipe,
-    shadow,
-    shadowStyle,
-    style,
     ...rest
   } = props;
 
-  let { children } = props;
-
-  if (!Array.isArray(children)) children = [children];
+  const slides = Array.isArray(children) ? children : [children];
 
   const position = Animated.divide(driver, width);
 
-  const backgroundColor =
-    children.length > 1
-      ? driver.interpolate({
-          inputRange: Array(children.length)
-            .fill()
-            .map((_, index) => index * width),
-          outputRange:
-            outputRange || Array(children.length).fill('transparent'),
-          extrapolate: 'clamp'
-        })
-      : (outputRange && outputRange[0]) || 'transparent';
+  const onScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { x: driver } } }],
+    { useNativeDriver: true }
+  );
 
-  const onScroll = Animated.event([
-    { nativeEvent: { contentOffset: { x: driver } } }
-  ]);
-
-  const onMomentumScrollEnd = e =>
-    onSwipe && onSwipe(e.nativeEvent.contentOffset.x / width, e);
+  const onMomentumScrollEnd = e => {
+    if (onSwipe) {
+      onSwipe(e, e.nativeEvent.contentOffset.x / width);
+    }
+  };
 
   return (
     <View style={styles.full}>
@@ -53,28 +39,23 @@ const Swiper = props => {
         onMomentumScrollEnd={onMomentumScrollEnd}
         onScroll={onScroll}
         pagingEnabled
+        ref={ref}
         scrollEventThrottle={16}
         showsHorizontalScrollIndicator={false}
-        {...rest}
-        style={[{ backgroundColor }, style]}>
-        {children.map((slide, i) => (
+        {...rest}>
+        {slides.map((slide, i) => (
           <View key={`slide-${i}`} style={styles.slide}>
             {slide}
           </View>
         ))}
       </Animated.ScrollView>
 
-      {dots &&
-        shadow && (
-          <View style={[styles.shadowContainer, styles.shadow, shadowStyle]} />
-        )}
-
       {dots && (
         <View style={[styles.dotContainer, { bottom: dotsBottom }]}>
-          {children.map((slide, i) => (
+          {slides.map((slide, i) => (
             <View
-              key={`swiper-dot-${i}`}
-              style={[styles.dot, dotStyle, { backgroundColor: dotsColor }]}
+              key={`dot-${i}`}
+              style={[dotsStyle, { backgroundColor: dotsColor }]}
             />
           ))}
         </View>
@@ -82,15 +63,18 @@ const Swiper = props => {
 
       {dots && (
         <View style={[styles.dotContainer, { bottom: dotsBottom }]}>
-          {children.map((slide, i) => (
+          {slides.map((slide, i) => (
             <Animated.View
-              key={`swiper-dot-active-${i}`}
+              key={`dot-active-${i}`}
               style={[
-                styles.dot,
-                dotStyleActive,
+                dotsStyle,
                 {
                   backgroundColor: dotsColorActive,
-                  opacity: Animated.add(position, 1 - i)
+                  opacity: position.interpolate({
+                    inputRange: [i - 1, i, i + 1],
+                    outputRange: [0, 1, 0],
+                    extrapolate: 'clamp'
+                  })
                 }
               ]}
             />
@@ -99,12 +83,18 @@ const Swiper = props => {
       )}
     </View>
   );
-};
+});
 
 Swiper.defaultProps = {
-  dotsBottom: 30,
+  dotsBottom: 100,
   dotsColor: 'rgba(0, 0, 0, 0.25)',
-  dotsColorActive: 'rgba(0, 0, 0, 0.75)',
+  dotsColorActive: '#000',
+  dotsStyle: {
+    borderRadius: 4,
+    height: 8,
+    marginHorizontal: 4,
+    width: 8
+  },
   driver: new Animated.Value(0)
 };
 
@@ -113,30 +103,9 @@ const styles = {
   slide: { width },
   dotContainer: {
     alignItems: 'center',
+    alignSelf: 'center',
     flexDirection: 'row',
-    justifyContent: 'center',
-    position: 'absolute',
-    width
-  },
-  dot: {
-    borderRadius: 4,
-    height: 8,
-    marginLeft: 4,
-    marginRight: 4,
-    width: 8
-  },
-  shadowContainer: {
-    bottom: 0,
-    height: 70,
-    position: 'absolute',
-    width
-  },
-  shadow: {
-    backgroundColor: '#fff',
-    shadowColor: 'rgba(0, 0, 0, 0.15)',
-    shadowOffset: { height: -0.5, width: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 7.5
+    position: 'absolute'
   }
 };
 
