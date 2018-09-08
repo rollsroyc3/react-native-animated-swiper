@@ -32,46 +32,47 @@ const Swiper = React.forwardRef((props, ref) => {
     }
   };
 
+  const dotsContainerStyle = [styles.dotsContainer, { bottom: dotsBottom }];
+
+  const dotStyle = [dotsStyle, { backgroundColor: dotsColor }];
+  const dotActiveStyle = [dotsStyle, { backgroundColor: dotsColorActive }];
+
   return (
-    <View style={styles.full}>
+    <View style={styles.container}>
       <Animated.ScrollView
-        horizontal
         onMomentumScrollEnd={onMomentumScrollEnd}
         onScroll={onScroll}
         pagingEnabled
-        ref={ref}
         scrollEventThrottle={16}
         showsHorizontalScrollIndicator={false}
-        {...rest}>
-        {slides.map((slide, i) => (
-          <View key={`slide-${i}`} style={styles.slide}>
+        {...rest}
+        horizontal
+        ref={ref}>
+        {slides.map((slide, index) => (
+          <View key={`slide-${index}`} style={styles.slide}>
             {slide}
           </View>
         ))}
       </Animated.ScrollView>
 
       {dots && (
-        <View style={[styles.dotContainer, { bottom: dotsBottom }]}>
-          {slides.map((slide, i) => (
-            <View
-              key={`dot-${i}`}
-              style={[dotsStyle, { backgroundColor: dotsColor }]}
-            />
+        <View style={dotsContainerStyle}>
+          {slides.map((slide, index) => (
+            <View key={`dot-${index}`} style={dotStyle} />
           ))}
         </View>
       )}
 
       {dots && (
-        <View style={[styles.dotContainer, { bottom: dotsBottom }]}>
-          {slides.map((slide, i) => (
+        <View style={dotsContainerStyle}>
+          {slides.map((slide, index) => (
             <Animated.View
-              key={`dot-active-${i}`}
+              key={`dot-active-${index}`}
               style={[
-                dotsStyle,
+                dotActiveStyle,
                 {
-                  backgroundColor: dotsColorActive,
                   opacity: position.interpolate({
-                    inputRange: [i - 1, i, i + 1],
+                    inputRange: [index - 1, index, index + 1],
                     outputRange: [0, 1, 0],
                     extrapolate: 'clamp'
                   })
@@ -99,9 +100,9 @@ Swiper.defaultProps = {
 };
 
 const styles = {
-  full: { flex: 1 },
+  container: { flex: 1 },
   slide: { width },
-  dotContainer: {
+  dotsContainer: {
     alignItems: 'center',
     alignSelf: 'center',
     flexDirection: 'row',
