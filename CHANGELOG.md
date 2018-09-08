@@ -1,4 +1,4 @@
-# 0.0.21
+# 0.0.23
 
 - **Breaking:** Drop `backgroundColor` prop, you can use a custom driver for that (example below).
 - **Breaking:** Drop support for shadows, you can use a regular view on top of the swiper for that.
