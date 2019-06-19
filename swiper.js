@@ -4,7 +4,7 @@ import { Animated, Dimensions, View } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
-const Swiper = React.forwardRef((props, ref) => {
+const Swiper = props => {
   const {
     children,
     dots,
@@ -14,6 +14,7 @@ const Swiper = React.forwardRef((props, ref) => {
     dotsStyle,
     driver,
     onSwipe,
+    activeIndex,
     ...rest
   } = props;
 
@@ -32,22 +33,41 @@ const Swiper = React.forwardRef((props, ref) => {
     }
   };
 
+   const _getWrappedRef = () => {
+        // https://github.com/facebook/react-native/issues/10635
+        // https://stackoverflow.com/a/48786374/8412141
+        return this._swiper && this._swiper.getNode && this._swiper.getNode();
+    }
+
+  const scrollTo = index => {
+    let wrappedRef = this._getWrappedRef();
+    wrappedRef.scrollTo({x: index, y: 0, animated: true})
+  }
+
   const dotsContainerStyle = [styles.dotsContainer, { bottom: dotsBottom }];
 
   const dotStyle = [dotsStyle, { backgroundColor: dotsColor }];
   const dotActiveStyle = [dotsStyle, { backgroundColor: dotsColorActive }];
+
+  const _snapToItem = (value) => {
+ this._swiper.scrollTo({x: index, y: 0, animated: true})
+  }
 
   return (
     <View style={styles.container}>
       <Animated.ScrollView
         onMomentumScrollEnd={onMomentumScrollEnd}
         onScroll={onScroll}
+        scrollTo={scrollTo}
         pagingEnabled
         scrollEventThrottle={16}
         showsHorizontalScrollIndicator={false}
+        snapToInterval={width}
+        snapToAlignment="center"
+        decelerationRate="fast"
         {...rest}
         horizontal
-        ref={ref}>
+        ref={ref => (this._swiper = ref)}>
         {slides.map((slide, index) => (
           <View key={`slide-${index}`} style={styles.slide}>
             {slide}
@@ -84,9 +104,10 @@ const Swiper = React.forwardRef((props, ref) => {
       )}
     </View>
   );
-});
+};
 
 Swiper.defaultProps = {
+  activeIndex: 0,
   dotsBottom: 100,
   dotsColor: 'rgba(0, 0, 0, 0.25)',
   dotsColorActive: '#000',
